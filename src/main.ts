@@ -45,29 +45,29 @@ export class App implements OnInit {
     obs$
       .pipe(
         map((x) => x),
-        debounceTime(200)
+        debounceTime(200) //comment out
       )
       .subscribe((x) => console.log(x));
 
     // test after subscribe
     setTimeout(() => {
       sub.next('aa');
-    }, 100);
+    }, 2000);
     setTimeout(() => {
       sub.next('bb');
-    }, 100);
+    }, 4000);
     setTimeout(() => {
       sub.next('cc');
-    }, 100);
+    }, 6000);
     setTimeout(() => {
       sub.next('dd');
-    }, 100);
+    }, 8000);
     setTimeout(() => {
       sub.next('ee');
-    }, 100);
+    }, 10000);
     setTimeout(() => {
       sub.next('ff');
-    }, 100);
+    }, 12000);
   }
 }
 
