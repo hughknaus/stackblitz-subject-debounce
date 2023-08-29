@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
+  BehaviorSubject,
   debounceTime,
   delay,
   map,
   Observable,
   of,
+  ReplaySubject,
   Subject,
   switchMap,
 } from 'rxjs';
@@ -30,32 +32,24 @@ export class App implements OnInit {
 
   ngOnInit() {
     const sub = new Subject<string>();
-    //const obs$: Observable<string> = of('11', 'aa', 'bb', 'cc', 'dd', 'ee', 'ff', 'gg', 'hh', 'ii');
+    //const sub = new BehaviorSubject('initial');
+    //const sub = new ReplaySubject<string>(1);
+
+    //const obs$: Observable<string> = of('11', 'aa', 'bb', 'cc', 'dd', 'ee', 'ff');
     const obs$: Observable<string> = sub.asObservable();
 
     setTimeout(() => {
       sub.next('00');
-    }, 100);
+    }, 100); // test before subscribe
 
     obs$
       .pipe(
-        //map((x) => x),
+        map((x) => x),
         debounceTime(200)
       )
       .subscribe((x) => console.log(x));
 
-    new Observable((x) => {
-      x.next();
-    })
-      .pipe(delay(200))
-      .subscribe(() => sub.next('yy'));
-
-    new Observable((x) => {
-      x.next();
-    })
-      .pipe(delay(200))
-      .subscribe(() => sub.next('zz'));
-
+    // test after subscribe
     setTimeout(() => {
       sub.next('aa');
     }, 100);
@@ -73,17 +67,6 @@ export class App implements OnInit {
     }, 100);
     setTimeout(() => {
       sub.next('ff');
-    }, 100);
-    //obs.subscribe((x) => console.log('second',x)); // OUTPUT => 1,2
-    setTimeout(() => {
-      sub.next('gg');
-    }, 100);
-    setTimeout(() => {
-      sub.next('hh');
-    }, 100);
-    //obs.subscribe((x) => console.log('third', x)); // OUTPUT => 2,3,4 (log of last 3 values from new subscriber)
-    setTimeout(() => {
-      sub.next('ii');
     }, 100);
   }
 }
